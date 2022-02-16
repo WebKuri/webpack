@@ -1,5 +1,5 @@
-# webpack
-webpackDemo
+# webpack使用
+## 1. 基础
 
 ### 局部安装
 
@@ -40,9 +40,12 @@ new class{constructor(s,t,c){this.name=s,this.age=t,this.subject=c}study(){conso
 ```javascript
 const path = require('path'); //引入path包
 module.exports = {
+    // 入口文件
   entry: './src/main.js',
+    // 出口模块
   output: {
     path: path.resolve(__dirname, 'dist'),//2.修改output对象的path属性改为绝对路径
+     // 打包后的名称
     filename: 'bundle.js'
   }
 }
@@ -70,4 +73,86 @@ console.log(sum(1, 2))
 console.log(priceFormat)
 ```
 
-webpack可以同时将commonJS规范和ES6模块化规范一起打包最终可以被index.html直接使用
+webpack可以同时将commonJS规范和ES6模块化规范一起打包最终可以被index.html直接使用。强的没边
+
+### CSS打包
+
+Webpack并不能直接打包CSS文件，需要借助各种插件使用其他特殊功能。
+
+```bash
+npm i css-loader -D
+```
+
+再打包还是不能显示样式,还需要style-loader
+
+```javascript
+npm i style-loader -D
+```
+
+```javascript
+const path = require('path') //引入path包
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'), //2.修改output对象的path属性改为绝对路径
+    filename: 'bundle.js',
+  },
+  mode: 'production',
+  module: {
+    rules: [
+      {
+        test: /\.css$/, // 正则表达式匹配
+        // 指定打包的loader, 数组表示多个
+        // 简单写法loader: "css-loader"
+        // 完整写法
+        use: [
+            // loader顺序由下到上
+            { loader: 'style-loader' },
+            { loader: 'css-loader' }
+        ],
+      },
+    ],
+  },
+}
+```
+
+### Sass，Less打包
+
+打包处理less文件
+运行 npm i less-loader less -D 命令
+在webpack.config.js 的module -> rules 数组中,添加loader
+
+```javascript
+module.exports = {
+    module:{
+        rules:[{
+                    test:/\.less$/,
+                    use:[
+                        'style-loader',
+                        'css-loader',
+                        'less-loader'
+                        ]
+            }]
+    }
+}
+```
+
+打包处理sass文件
+运行 npm i sass-loader dart-sass -D 命令
+在webpack.config.js 的module -> rules 数组中,添加loader
+
+```javascript
+module.exports = {
+    module:{
+        rules:[{
+                    test:/\.sass$/,
+                    use:[
+                        'style-loader',
+                        'css-loader',
+                        'sass-loader'
+                    ]
+            }]
+    }
+}
+```
+
