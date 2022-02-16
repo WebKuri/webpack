@@ -13,7 +13,18 @@ module.exports = {
         // 指定打包的loader, 数组表示多个
         // 简单写法loader: "css-loader"
         // 完整写法
-        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [require('autoprefixer')], // 注入插件配置
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.less$/,

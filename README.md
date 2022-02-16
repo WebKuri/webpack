@@ -156,3 +156,27 @@ module.exports = {
 }
 ```
 
+### PostCSS
+
+postcss是CSS各种CSS的预处理，autoprefixer是基于postcss的浏览器兼容前缀的插件
+
+![image-20220216223708175](image/image-20220216223708175.png)
+
+```javascript
+npx postcss --use autoprefixer -o end.css .\src\css\test2.css
+// test2.css
+.title {
+  user-select: none;
+}
+
+// 打包之后可以看到打包之后成了兼容微软、webkit、火狐浏览器的CSS样式
+.title {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9jc3MvdGVzdDIuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UseUJBQWlCO0tBQWpCLHNCQUFpQjtNQUFqQixxQkFBaUI7VUFBakIsaUJBQWlCO0FBQ25CIiwiZmlsZSI6ImVuZC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIudGl0bGUge1xyXG4gIHVzZXItc2VsZWN0OiBub25lO1xyXG59XHJcbiJdfQ== */
+```
+
