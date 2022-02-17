@@ -24,6 +24,7 @@
     "@babel/core": "^7.17.4",
     "@babel/plugin-transform-arrow-functions": "^7.16.7",
     "@babel/plugin-transform-block-scoping": "^7.16.7",
+    "@vue/compiler-sfc": "^3.2.31",
     "autoprefixer": "^10.4.2",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.2.4",
@@ -38,11 +39,13 @@
     "postcss-preset-env": "^7.4.0",
     "style-loader": "^3.3.1",
     "url-loader": "^4.1.1",
+    "vue-loader": "^17.0.0",
     "webpack": "^5.69.0",
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
     "@babel/preset-env": "^7.16.11",
-    "D": "npm:d@^1.0.1"
+    "D": "npm:d@^1.0.1",
+    "vue": "^3.2.29"
   }
 }

@@ -297,3 +297,100 @@ module.exports = {
 }
 ```
 
+
+
+### Vue文件loader
+
+vue-loader+@vue/compiler-sfc
+
+```javascript
+// 添加plugins
+new VueLoaderPlugin()
+```
+
+### Webpack Dev Server
+
+webpack-dev-server 是 Webpack 官方推出的一款开发工具，根据它的名字我们就应该知道，它提供了一个开发服务器，并且将自动编译和自动刷新浏览器等一系列对开发友好的功能全部集成在了一起。
+
+Webpack 配置对象中可以有一个叫作 devServer 的属性，专门用来为 webpack-dev-server 提供配置
+
+```javascript
+// ./webpack.config.js
+const path = require('path')
+
+module.exports = {
+  // ...
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000
+    // ...
+    // 详细配置文档：https://webpack.js.org/configuration/dev-server/
+  }
+}
+```
+
+#### Proxy 代理
+
+由于 webpack-dev-server 是一个本地开发服务器，所以我们的应用在开发阶段是独立运行在 localhost 的一个端口上，而后端服务又是运行在另外一个地址上。但是最终上线过后，我们的应用一般又会和后端服务部署到同源地址下。
+
+```javascript
+// ./webpack.config.js
+module.exports = {
+  // ...
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://api.github.com'
+      }
+    }
+  }
+}
+```
+
+那此时我们请求 http://localhost:8080/api/users ，就相当于请求了 https://api.github.com/api/users
+
+![](https://s0.lgstatic.com/i/image/M00/03/61/CgqCHl6ykvCAKWlNAAAktiTnWHU229.png)
+
+而我们真正希望请求的地址是 https://api.github.com/users，所以对于代理路径开头的 /api 我们要重写掉。我们可以添加一个 pathRewrite 属性来实现代理路径重写，重写规则就是把路径中开头的 /api 替换为空，pathRewrite 最终会以正则的方式来替换请求路径。
+
+```javascript
+// ./webpack.config.js
+module.exports = {
+  // ...
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://api.github.com',
+        pathRewrite: {
+          '^/api': '' // 替换掉代理地址中的 /api
+        },
+      }
+    }
+}
+```
+
+![https://s0.lgstatic.com/i/image/M00/03/61/CgqCHl6ykt-AfcoLAAAkkBntZkc327.png](https://s0.lgstatic.com/i/image/M00/03/61/CgqCHl6ykt-AfcoLAAAkkBntZkc327.png)
+
+除此之外，我们还需设置一个 changeOrigin 属性为 true。这是因为默认代理服务器会以我们实际在浏览器中请求的主机名，也就是 localhost:8080 作为代理请求中的主机名。而一般服务器需要根据请求的主机名判断是哪个网站的请求，那 localhost:8080 这个主机名，对于 GitHub 的服务器来说，肯定无法正常请求，所以需要修改
+
+将代理规则配置的 changeOrigin 属性设置为 true，就会以实际代理请求地址中的主机名去请求，也就是我们正常请求这个地址的主机名是什么，实际请求 GitHub 时就会设置成什么。
+
+```javascript
+// ./webpack.config.js
+module.exports = {
+  // ...
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://api.github.com',
+        pathRewrite: {
+          '^/api': '' // 替换掉代理地址中的 /api
+        },
+        changeOrigin: true // 确保请求 GitHub 的主机名就是：api.github.com
+      }
+    }
+  }
+}
+```
+
