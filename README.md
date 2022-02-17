@@ -217,7 +217,7 @@ npm i file-loader -D
 
 插件是 webpack 的[支柱](https://github.com/webpack/tapable)功能。webpack 自身也是构建于，你在 webpack 配置中用到的**相同的插件系统**之上！插件目的在于解决 [loader](https://www.webpackjs.com/concepts/loaders) 无法实现的**其他事**。
 
-#### clean-webpack-plugin
+### clean-webpack-plugin
 
 clean-webpack-plugin是一个清除文件的插件。在每次打包后，磁盘空间会存有打包后的资源，在再次打包的时候，我们需要先把本地已有的打包后的资源清空，来减少它们对磁盘空间的占用。插件clean-webpack-plugin就可以帮我们做这个事情。
 
@@ -227,7 +227,7 @@ const { CleanWebpackConfig } = require('clean-webpack-plugin')
 plugins: [new CleanWebpackConfig()]
 ```
 
-#### html-webpack-plugin 
+### html-webpack-plugin 
 
 这个插件用来简化创建服务于 webpack bundle 的 HTML 文件，尤其是对于在文件名中包含了 hash 值，而这个值在每次编译的时候都发生变化的情况。你既可以让这个插件来帮助你自动生成 HTML 文件，也可以使用 lodash 模板加载生成的 bundles，或者自己加载这些 bundles
 
@@ -243,8 +243,57 @@ plugins: [new HtmlWebpackPlugin()]
 plugins: [
     new HtmlWebpackPlugin({
       title: 'My App',
-      filename: 'assets/admin.html'
+      template: 'assets/admin.html'
     })
 ]
+```
+
+### babel
+
+讲ES6以及最新的JS代码转化为ES5等兼容代码。转化各种语法必须使用相应的插件。
+
+```javascript
+const message = 'Hello world'
+const names = ['abc', 'da', 'nda']
+names.forEach((item) => console.log(item))
+npx babel .\src\js\items.js --out-dir es6 //没有指定插件无效果
+
+❯ npm i @babel/plugin-transform-arrow-functions -D
+❯ npx babel .\src\js\items.js --out-dir es6 --plugins=@babel/plugin-transform-arrow-functions 
+// 箭头函数打包之后的结果
+const message = 'Hello world';
+const names = ['abc', 'da', 'nda'];
+names.forEach(function (item) {
+  return console.log(item);
+});
+```
+
+const并没有被转化为var，还需引入其他插件
+
+```javascript
+npm i @babel/plugin-transform-block-scoping -D
+npm i @babel/plugin-transform-block-scoping -D
+❯ npx babel .\src\js\items.js --out-dir es6 --plugins=@babel/plugin-transform-arrow-functions,@@babel/plugin-transform-block-scoping
+// 箭头函数和const变量转化后的结果
+var message = 'Hello world';
+var names = ['abc', 'da', 'nda'];
+names.forEach(function (item) {
+  return console.log(item);
+});
+```
+
+插件一个个下载太麻烦，直接使用预设方案
+
+```javascript
+npm i @babel/preset-env D
+```
+
+babel的配置文件
+
+```javascript
+// babel.config.js
+module.exports = {
+  presets: [['@babel/preset-env']],
+}
 ```
 
