@@ -95,4 +95,7 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
   ],
+  // devServer: {
+  //   contentBase: './dist',
+  // },
 }

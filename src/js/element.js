@@ -16,3 +16,5 @@ const bgDivEl = document.createElement('div')
 bgDivEl.className = 'image-bg'
 document.body.appendChild(divEl)
 document.body.appendChild(bgDivEl)
+console.log('213')
+console.log('2134')

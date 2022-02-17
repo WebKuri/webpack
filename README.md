@@ -297,8 +297,6 @@ module.exports = {
 }
 ```
 
-
-
 ### Vue文件loader
 
 vue-loader+@vue/compiler-sfc
