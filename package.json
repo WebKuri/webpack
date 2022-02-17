@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack --entry ./src/index.js --output-path ./build --mode=production",
-    "webpack": "webpack --watch",
-    "serve": "webpack serve"
+    "webpack": "webpack",
+    "serve": "webpack serve --config webpack.config.js"
   },
   "repository": {
     "type": "git",

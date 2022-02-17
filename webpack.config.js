@@ -95,7 +95,35 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
   ],
-  // devServer: {
-  //   contentBase: './dist',
-  // },
+  devServer: {
+    //  将依赖图之外的图加载content文件夹内容
+    // contentBase: './content',
+    // 热更新
+    hot: true,
+    // 局域网可访问,127.0.0.1本地可访问
+    host: '127.0.0.1',
+    // 端口号
+    port: '7777',
+    // 是否打开浏览器
+    open: true,
+    // 代理服务器解决本地后端服务器跨域问题
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000', // http://localhost:8000/api等于直接向这个链接发送请求
+        pathRewrite: {
+          '^/api': '', // http://localhost:8000/等于直接向这个链接发送请求，重写api的请求头
+        },
+        secure: false, // 支持http
+        changeOrigin: true, //修改成原来的请求连接，而不是代理服务器的连接
+      },
+    },
+    resolve: {
+      //  模块引入重命名
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+        js: path.resolve(__dirname, './src/js'),
+        pages: path.resolve(__dirname, './src/pages'),
+      },
+    },
+  },
 }
